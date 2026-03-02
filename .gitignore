@@ -1,0 +1,53 @@
+# ─── Python ───
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+
+# ─── Environment & Secrets ───
+.env
+spotify_token.json
+
+# ─── Runtime Data (generated at runtime) ───
+laptop_memory.json
+notes.txt
+reminders.json
+*.wav
+*.mp3
+temp.*
+
+# ─── Chrome Profile (Selenium) ───
+jarvis_chrome_profile/
+chrome_nexus/
+
+# ─── Music Cache (yt-dlp downloads) ───
+music_cache/
+
+# ─── Backups & Temp ───
+*.bak
+pi_backup/
+_pi_*.py
+error.txt
+raspinfo.txt
+nexus.txt
+backend.txt
+setup_instructions.txt
+*.log
+
+# ─── IDE ───
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ─── OS ───
+.DS_Store
+Thumbs.db
+desktop.ini
