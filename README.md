@@ -46,7 +46,7 @@ NEXUS is a **two-node system**. The Raspberry Pi is the always-on **voice interf
 │        (Voice Node)          │                                   │       (Server Node)          │
 │                              │   POST /spotify/play              │                              │
 │  • Wake Word Detection       │   POST /open_app                  │  • Flask REST API (port 5000)│
-│    (Porcupine, on-device)    │   POST /memory                   │  • Spotify Web API (OAuth)   │
+│    (Porcupine, on-device)    │   POST /memory                    │  • Spotify Web API (OAuth)   │
 │  • Voice Recording           │   GET  /system_stats              │  • Selenium Browser Control  │
 │    (PyAudio / sounddevice)   │   GET  /reminders/check           │  • yt-dlp + VLC Music        │
 │  • Speech-to-Text            │   POST /take_note                 │  • System Monitoring (psutil)│
@@ -55,7 +55,7 @@ NEXUS is a **two-node system**. The Raspberry Pi is the always-on **voice interf
 │    (Gemini → Groq)           │   Token Auth Header:              │  • Notes Storage             │
 │  • Text-to-Speech            │   X-Nexus-Token: <secret>         │  • App / Process Control     │
 │    (ElevenLabs → Deepgram    │                                   │                              │
-│     → Edge-TTS → pyttsx3)   │                                   │                              │
+│     → Edge-TTS → pyttsx3)    │                                   │                              │
 │  • Rich Terminal UI          │                                   │                              │
 │                              │                                   │                              │
 │  Hardware:                   │                                   │                              │
