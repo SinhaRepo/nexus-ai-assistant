@@ -105,14 +105,14 @@ NEXUS is a **two-node system**. The Raspberry Pi is the always-on **voice interf
 - **Push-to-talk button** — Hold a physical GPIO button, speak, release. Great for noisy rooms.
 - **Text input** — Type in the terminal. Works even without a microphone.
 
-### 🧠 AI Brain (Dual-Model Failover)
+### AI Brain (Dual-Model Failover)
 - **Primary**: Google Gemini 2.5 Flash — fast, smart, 1M token context.
 - **Failover**: Gemini 2.5 Flash Lite → Groq Llama 3.3 70B Versatile.
 - If the primary model hits a rate limit (HTTP 429), NEXUS automatically tries the next model. You never notice a hiccup.
 - Multi-turn conversations with persistent chat history (survives reboots).
 - **Anti-hallucination safeguards** — The system prompt strictly forbids the AI from inventing news, reminders, times or any facts. It can only use data explicitly provided in context.
 
-### 🔊 Text-to-Speech (4-Tier Waterfall)
+### Text-to-Speech (4-Tier Waterfall)
 
 | Priority | Engine | Quality | What Happens |
 |----------|--------|---------|-------------|
@@ -123,13 +123,13 @@ NEXUS is a **two-node system**. The Raspberry Pi is the always-on **voice interf
 
 NEXUS checks your ElevenLabs quota at startup. If it's low, it automatically starts at Deepgram instead. You can also manually switch engines: *"Use Edge TTS"*.
 
-### 🎵 Music (3-Tier Fallback)
+### Music (3-Tier Fallback)
 - **Spotify** — Full OAuth 2.0 integration. Play, pause, skip, previous, volume control, "what's playing?"
 - **yt-dlp + VLC** — If Spotify fails, NEXUS downloads the song from YouTube and plays it through VLC on your laptop.
 - **YouTube Music (browser)** — Last resort: opens YouTube Music search in Chrome via Selenium.
 - Just say: *"Play Bohemian Rhapsody"* — NEXUS tries all three automatically.
 
-### 💻 Laptop System Control
+### Laptop System Control
 - **Open apps** — *"Open VS Code"*, *"Open Chrome"*, *"Open Spotify"* (20+ whitelisted apps).
 - **Close apps** — *"Close Chrome"*, *"Close Notepad"*.
 - **Kill processes by port** — *"Kill port 3000"*.
@@ -137,45 +137,45 @@ NEXUS checks your ElevenLabs quota at startup. If it's low, it automatically sta
 - **Git status** — *"Git status"* → branch, changes, recent commits.
 - **System stats** — *"Laptop status"* → CPU %, RAM usage, battery level, disk space.
 
-### 🔍 Web Search (Smart Triggering)
+### Web Search (Smart Triggering)
 - **Primary**: [Tavily AI Search](https://tavily.com/) — Returns AI-summarized answers, not just links.
 - **Fallback**: DuckDuckGo — If Tavily is unavailable.
 - Triggered naturally by phrases like: *"Who won the World Cup?"*, *"What is the price of Bitcoin?"*, *"Search for Python tutorials"*
 
-### 📰 News & Daily Briefings
+### News & Daily Briefings
 - Top headlines from [NewsAPI.org](https://newsapi.org/).
-- Say **"Good morning"** → NEXUS greets you with the **exact current time**, **live weather**, **top news headlines**, and **pending reminders**. All data is real — never fabricated.
+- Say **"Good morning"** → NEXUS greets you with the **exact current time**, **live weather**, **top news headlines** and **pending reminders**. All data is real — never fabricated.
 
-### ⏰ Persistent Reminders
+### Persistent Reminders
 - *"Remind me to call Mom in 30 minutes"*
 - Stored as JSON on the laptop — survives Pi reboots.
 - Background thread on the Pi polls every 30 seconds. When a reminder is due, it pops up on screen and NEXUS speaks it aloud.
 
-### 📝 Note-Taking
+### Note-Taking
 - *"Take a note that the meeting is at 3 PM"* — Saved to `notes.txt` on the laptop.
 - *"Read my notes"* — Reads everything back.
 - *"Clear my notes"* — Deletes all notes.
 
-### 🌤️ Weather
+### Weather
 - Live weather via [Open-Meteo](https://open-meteo.com/) (completely free, no API key needed).
 - *"Weather in Tokyo"*, *"Temperature in New York"*, *"How's the weather?"*
 - Returns: temperature, humidity, wind speed.
 
-### 📊 System Monitoring & Alerts
-- A background thread on the laptop monitors CPU, battery, and internet connectivity.
+### System Monitoring & Alerts
+- A background thread on the laptop monitors CPU, battery and internet connectivity.
 - **CPU > 80%** → Alert pushed to Pi and spoken aloud.
 - **Battery < 20%** → Alert.
 - **Internet down** → Alert.
 - Cooldown timers prevent alert spam.
 
-### 🧮 Calculator
+### Calculator
 - *"Calculate 25 times 4"*, *"What is 144 divided by 12"*
 - Safe math evaluation using Python's AST parser — no `eval()`, no code injection.
 
-### 😴 Sleep Mode
+### Sleep Mode
 - *"Goodnight"* or *"Going to bed"* → Plays calm ambient music on Spotify (or yt-dlp fallback).
 
-### 👤 Personalization
+### Personalization
 - *"My name is Ansh"* → Remembered across sessions.
 - *"I live in Mumbai"* → Weather defaults to your city.
 - Persistent user profile stored on the laptop.
@@ -276,7 +276,7 @@ You need accounts on **8 services**. All of them offer free tiers that are more 
 | 7 | **Picovoice** | Wake word ("Hey Nexus") | **[console.picovoice.ai](https://console.picovoice.ai/)** | Free for personal use |
 | 8 | **Spotify Developer** | Music playback control | **[developer.spotify.com](https://developer.spotify.com/)** | Free (requires Spotify account) |
 
-> **💡 Tip:** Open all 8 links in browser tabs right now and create accounts. Then come back here and continue. It takes about 15 minutes total.
+> **Tip:** Open all 8 links in browser tabs right now and create accounts. Then come back here and continue. It takes about 15 minutes total.
 
 ### Software Requirements
 
@@ -290,7 +290,7 @@ You need accounts on **8 services**. All of them offer free tiers that are more 
 
 ## Setup — Raspberry Pi (Voice Node)
 
-> **🎯 Goal:** By the end of this section, your Pi will be running NEXUS — listening for "Hey Nexus", recording your voice, talking back through the speaker, and sending commands to your laptop.
+> **Goal:** By the end of this section, your Pi will be running NEXUS — listening for "Hey Nexus", recording your voice, talking back through the speaker, and sending commands to your laptop.
 
 ### Step 1: Flash the SD Card
 
@@ -300,11 +300,11 @@ You need accounts on **8 services**. All of them offer free tiers that are more 
    - **Device:** Raspberry Pi Zero W
    - **OS:** Raspberry Pi OS (other) → **Raspberry Pi OS Lite (32-bit)** (no desktop needed)
    - **Storage:** Your SD card
-4. **Before clicking "Write"**, click the ⚙️ gear icon to open **Advanced Settings**:
-   - ✅ **Enable SSH** → Use password authentication
+4. **Before clicking "Write"**, click the gear icon to open **Advanced Settings**:
+   - **Enable SSH** → Use password authentication
    - Set **username**: `pi` and **password**: `raspberry` (or anything you'll remember)
-   - ✅ **Configure Wi-Fi** → Enter your Wi-Fi name (SSID) and password
-   - ✅ **Set hostname**: `nexus` (so you can reach it at `nexus.local`)
+   - **Configure Wi-Fi** → Enter your Wi-Fi name (SSID) and password
+   - **Set hostname**: `nexus` (so you can reach it at `nexus.local`)
 5. Click **Write** and wait for it to finish.
 6. Eject the SD card and plug it into your Raspberry Pi.
 
@@ -322,7 +322,7 @@ ssh pi@nexus.local
 
 4. Type `yes` when asked to trust the fingerprint, then enter your password.
 
-**You're now inside the Pi!** 🎉 Everything from here runs on the Pi.
+**You're now inside the Pi!** Everything from here runs on the Pi.
 
 ### Step 3: System Update
 
@@ -334,7 +334,7 @@ This updates all system packages. Takes a few minutes on the Pi Zero — be pati
 
 ### Step 4: Install Audio & Build Dependencies
 
-The Pi needs several system libraries to handle microphone input, audio output, and compile Python audio packages:
+The Pi needs several system libraries to handle microphone input, audio output and compile Python audio packages:
 
 ```bash
 sudo apt-get install -y \
@@ -390,7 +390,7 @@ arecord -d 3 -f cd test.wav
 aplay test.wav
 ```
 
-**If you hear your own voice, the mic and speaker are working!** 🎤🔊
+**If you hear your own voice, the mic and speaker are working!**
 
 > **Troubleshooting:** If `arecord -l` shows nothing, try a different USB port or a different mic. On the Pi Zero, make sure the OTG adapter is connected to the **data** micro USB port (not the power port).
 
@@ -408,7 +408,7 @@ which python3
 # Should show: /home/pi/.venv/bin/python3
 ```
 
-> **💡 Tip:** Add the activation command to your `.bashrc` so it runs automatically on every login:
+> **Tip:** Add the activation command to your `.bashrc` so it runs automatically on every login:
 > ```bash
 > echo 'source ~/.venv/bin/activate' >> ~/.bashrc
 > ```
@@ -436,7 +436,7 @@ source ~/.venv/bin/activate
 pip install -r requirements-pi.txt
 ```
 
-> ⚠️ **This will take a while on the Pi Zero** (up to 20–30 minutes). NumPy, SciPy, and PyAudio need to compile from source on ARMv6. Be patient — don't interrupt it.
+> ⚠️ **This will take a while on the Pi Zero** (up to 20–30 minutes). NumPy, SciPy and PyAudio need to compile from source on ARMv6. Be patient — don't interrupt it.
 >
 > **If you get memory errors** during the install, create a temporary swap file first:
 > ```bash
@@ -486,7 +486,7 @@ The push-to-talk button connects **GPIO Pin 23** to **Ground (GND)**. That's it 
     detects as a button press. No external resistors needed.
 ```
 
-> **No soldering required!** If your Pi has header pins pre-soldered, just push jumper wires onto Pin 16 (GPIO23) and Pin 6 (GND), and connect them to the two legs of the button.
+> **No soldering required!** If your Pi has header pins pre-soldered, just push jumper wires onto Pin 16 (GPIO23) and Pin 6 (GND) and connect them to the two legs of the button.
 
 ### Step 10: Set Up the Porcupine Wake Word
 
@@ -624,7 +624,7 @@ sudo systemctl status nexus.service
 
 ## Setup — Windows Laptop (Server Node)
 
-> **🎯 Goal:** By the end of this section, your laptop will be running the NEXUS server — handling Spotify, system control, memory, and music playback.
+> **Goal:** By the end of this section, your laptop will be running the NEXUS server — handling Spotify, system control, memory and music playback.
 
 ### Step 1: Install Python
 
@@ -652,13 +652,13 @@ cd nexus
 pip install -r requirements-laptop.txt
 ```
 
-This installs: Flask, psutil, Selenium, yt-dlp, python-dotenv, and other required packages.
+This installs: Flask, psutil, Selenium, yt-dlp, python-dotenv and other required packages.
 
 ### Step 4: Install Google Chrome
 
 If you don't already have Chrome installed, download it from **[google.com/chrome](https://www.google.com/chrome/)**.
 
-NEXUS uses Chrome (via Selenium) to open Google searches, YouTube, and web pages on your laptop.
+NEXUS uses Chrome (via Selenium) to open Google searches, YouTube and web pages on your laptop.
 
 ### Step 5: Install ffmpeg
 
@@ -793,7 +793,7 @@ You should see this boot sequence:
 ```
 ╭──────────────────────────────────────────────────────────────╮
 │        NEXUS  ::  NEURAL INTERFACE ONLINE                    │
-│  NODE: RASPBERRY PI  |  ARCH: ARMv6  |  PYTHON 3.11         │
+│  NODE: RASPBERRY PI  |  ARCH: ARMv6  |  PYTHON 3.11          │
 │  SESSION ACTIVE                                              │
 ╰──────────────────────────────────────────────────────────────╯
 ──────────── SUBSYSTEM INITIALIZATION SEQUENCE ─────────────
@@ -820,7 +820,7 @@ You should see this boot sequence:
 | **5/6 Wake Word** | Porcupine loaded the `.ppn` model | Wrong path or invalid access key |
 | **6/6 Memory** | Chat history loaded from laptop | Laptop unreachable — starts with blank memory (not critical) |
 
-**All 6 showing `[  OK  ]`? You're ready to go!** Say "Hey Nexus" and ask it anything. 🎉
+**All 6 showing `[  OK  ]`? You're ready to go!** Say "Hey Nexus" and ask it anything. 
 
 ---
 
@@ -834,7 +834,7 @@ You should see this boot sequence:
 | **Button** | **Hold** the GPIO button → speak → **release** the button |
 | **Text** | Just type in the terminal and press Enter |
 
-### 🎵 Music Commands
+### Music Commands
 
 | Say This | What Happens |
 |----------|-------------|
@@ -848,7 +848,7 @@ You should see this boot sequence:
 | *"What's playing?"* / *"Current song"* | Tells you the current track and artist |
 | *"Stop"* / *"Stop music"* | Stops all audio playback |
 
-### 🌅 Daily Life Commands
+### Daily Life Commands
 
 | Say This | What Happens |
 |----------|-------------|
@@ -864,7 +864,7 @@ You should see this boot sequence:
 | *"Calculate 25 times 4"* | Returns: 100 (safe AST math) |
 | *"Goodnight"* / *"Going to bed"* | Plays calm sleep music and says goodnight |
 
-### 💻 Laptop Control Commands
+### Laptop Control Commands
 
 | Say This | What Happens |
 |----------|-------------|
@@ -873,12 +873,12 @@ You should see this boot sequence:
 | *"Close Chrome"* | Kills all Chrome processes |
 | *"Kill port 3000"* | Kills whatever process is running on port 3000 |
 | *"Run command git status"* | Runs `git status` and reads the output to you |
-| *"Git status"* | Shows branch, changes, and recent commits |
+| *"Git status"* | Shows branch, changes and recent commits |
 | *"Laptop status"* / *"CPU usage"* | CPU %, RAM usage, battery level, disk space |
 | *"System status"* / *"Pi status"* | Pi's CPU temperature and available RAM |
 | *"Battery level"* | Laptop battery percentage |
 
-### 🔍 Search & Knowledge Commands
+### Search & Knowledge Commands
 
 | Say This | What Happens |
 |----------|-------------|
@@ -888,7 +888,7 @@ You should see this boot sequence:
 | *"Google search for best restaurants"* | Opens Google search on laptop + provides web search context |
 | *"Open YouTube cats"* | Opens YouTube search for "cats" on the laptop |
 
-### ⚙️ System Commands
+### System Commands
 
 | Say This | What Happens |
 |----------|-------------|
@@ -1092,7 +1092,7 @@ In-memory chat history is capped at **50 messages** to protect the Pi Zero's 512
 | **Gemini returns 429 errors** | Rate limit hit | Handled automatically — NEXUS tries the next model in the chain. No action needed. |
 | **Pi runs out of memory during `pip install`** | Pi Zero only has 512MB RAM | Create a swap file (see Pi Step 8) and retry. |
 | **`[FAIL] Memory Fetch`** at boot | Laptop unreachable at startup | NEXUS starts with blank memory and syncs once the laptop comes online. Not critical. |
-| **"Goodnight" doesn't play music** | Spotify not active AND yt-dlp not available | Open Spotify on your laptop, or ensure yt-dlp + ffmpeg are installed. |
+| **"Goodnight" doesn't play music** | Spotify not active AND yt-dlp not available | Open Spotify on your laptop or ensure yt-dlp + ffmpeg are installed. |
 | **"Play birthday playlist" plays wrong song** | — | Fixed in latest version. If you see this, update `main.py` on the Pi. |
 
 ---
@@ -1107,9 +1107,9 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 <div align="center">
 
-**Built by [Ansh Sinha](https://linkedin.com/in/anshsinha)**
+**Built by [Ansh Sinha](https://www.linkedin.com/in/sinhaansh)**
 
-[GitHub](https://github.com/anshsinha) · [LinkedIn](https://linkedin.com/in/anshsinha)
+[GitHub](https://github.com/SinhaRepo) · [LinkedIn](https://www.linkedin.com/in/sinhaansh)
 
 ---
 
