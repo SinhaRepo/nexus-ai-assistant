@@ -1,5 +1,4 @@
-# NEXUS AI Assistant — Created by Ansh Sinha | LinkedIn: linkedin.com/in/anshsinha | GitHub: github.com/anshsinha | © 2026 All Rights Reserved
-# Renamed from JARVIS to NEXUS — Full rewrite with Porcupine wake word, Spotify API, Tavily search, Deepgram TTS, system control
+# NEXUS AI Assistant — Created by Ansh Sinha | LinkedIn: linkedin.com/in/sinhaansh | GitHub: github.com/SinhaRepo | © 2026 All Rights Reserved
 # --- NUCLEAR SILENCE BLOCK ---
 import os
 import sys
