@@ -640,7 +640,7 @@ python --version
 ### Step 2: Clone the Repository
 
 ```powershell
-git clone https://github.com/anshsinha/nexus.git
+git clone https://github.com/SinhaRepo/nexus-ai-assistant.git
 cd nexus
 ```
 
