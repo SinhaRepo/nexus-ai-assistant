@@ -7,8 +7,8 @@
 #  Unauthorized copying, modification, or distribution is
 #  strictly prohibited.
 #
-#  GitHub  : https://github.com/Sinharepo
-#  LinkedIn: https://linkedin.com/in/sinhaansh
+#  GitHub  : https://github.com/SinhaRepo
+#  LinkedIn: https://www.linkedin.com/in/sinhaansh
 # ════════════════════════════════════════════════════════════════
 
 import threading
@@ -41,7 +41,7 @@ def print_header():
     credits = Text(justify="center")
     credits.append("© 2026 Ansh Sinha", style="bold white")
     credits.append("  |  ", style="dim")
-    credits.append("github.com/Sinharepo", style="underline #00afff")
+    credits.append("github.com/SinhaRepo", style="underline #00afff")
     credits.append("  |  ", style="dim")
     credits.append("linkedin.com/in/sinhaansh", style="underline #00afff")
     credits.align("center", console.width)
