@@ -1,8 +1,8 @@
 <div align="center">
 
-# 🧠 NEXUS — AI Voice Assistant
+#  NEXUS — AI Voice Assistant
 
-**A hardware AI voice assistant built on a $10 Raspberry Pi Zero W that controls your laptop, plays Spotify, searches the web, monitors your system, and talks back — all through a custom wake word.**
+**A hardware AI voice assistant built on a $10 Raspberry Pi Zero W that controls your laptop, plays Spotify, searches the web, monitors your system and talks back — all through a custom wake word.**
 
 [![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python&logoColor=white)](https://python.org)
 [![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-Zero%20W-c51a4a?logo=raspberrypi&logoColor=white)](https://www.raspberrypi.com)
@@ -10,7 +10,7 @@
 [![Gemini](https://img.shields.io/badge/Gemini-2.5%20Flash-4285F4?logo=google&logoColor=white)](https://aistudio.google.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**Created by [Ansh Sinha](https://linkedin.com/in/anshsinha)** · [GitHub](https://github.com/anshsinha) · [LinkedIn](https://linkedin.com/in/anshsinha)
+**Created by [Ansh Sinha](https://www.linkedin.com/in/sinhaansh)** · [GitHub](https://github.com/SinhaRepo) · [LinkedIn](https://www.linkedin.com/in/sinhaansh)
 
 </div>
 
@@ -38,7 +38,7 @@
 
 ## Architecture Overview
 
-NEXUS is a **two-node system**. The Raspberry Pi is the always-on **voice interface** — it listens, thinks, and speaks. The Windows laptop is the **muscle** — it runs apps, plays music, browses the web, and stores all data. The two talk over your home Wi-Fi using a REST API.
+NEXUS is a **two-node system**. The Raspberry Pi is the always-on **voice interface** — it listens, thinks and speaks. The Windows laptop is the **muscle** — it runs apps, plays music, browses the web and stores all data. The two talk over your home Wi-Fi using a REST API.
 
 ```
 ┌──────────────────────────────┐       HTTP/REST (Wi-Fi LAN)       ┌──────────────────────────────┐
@@ -100,7 +100,7 @@ NEXUS is a **two-node system**. The Raspberry Pi is the always-on **voice interf
 
 ## Features
 
-### 🎤 Voice Input (3 Ways to Talk to NEXUS)
+### Voice Input (3 Ways to Talk to NEXUS)
 - **Custom wake word** — Say **"Hey Nexus"** and it starts listening. Powered by [Picovoice Porcupine](https://picovoice.ai/platform/porcupine/), runs 100% on-device (no cloud, no internet needed for detection).
 - **Push-to-talk button** — Hold a physical GPIO button, speak, release. Great for noisy rooms.
 - **Text input** — Type in the terminal. Works even without a microphone.
@@ -110,7 +110,7 @@ NEXUS is a **two-node system**. The Raspberry Pi is the always-on **voice interf
 - **Failover**: Gemini 2.5 Flash Lite → Groq Llama 3.3 70B Versatile.
 - If the primary model hits a rate limit (HTTP 429), NEXUS automatically tries the next model. You never notice a hiccup.
 - Multi-turn conversations with persistent chat history (survives reboots).
-- **Anti-hallucination safeguards** — The system prompt strictly forbids the AI from inventing news, reminders, times, or any facts. It can only use data explicitly provided in context.
+- **Anti-hallucination safeguards** — The system prompt strictly forbids the AI from inventing news, reminders, times or any facts. It can only use data explicitly provided in context.
 
 ### 🔊 Text-to-Speech (4-Tier Waterfall)
 
