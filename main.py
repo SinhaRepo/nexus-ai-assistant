@@ -119,7 +119,7 @@ NEWS_API_KEY = os.getenv("NEWS_API_KEY", "")
 PORCUPINE_ACCESS_KEY = os.getenv("PORCUPINE_ACCESS_KEY", "")
 
 BUTTON_PIN = 23
-ELEVEN_VOICE_ID = "JBFqnCBsd6RMkjVDRZzb"
+ELEVEN_VOICE_ID = os.getenv("ELEVENLABS_VOICE_ID", "JBFqnCBsd6RMkjVDRZzb")
 ELEVEN_URL = f"https://api.elevenlabs.io/v1/text-to-speech/{ELEVEN_VOICE_ID}/stream"
 
 # Porcupine wake word model path
