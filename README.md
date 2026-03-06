@@ -163,8 +163,8 @@ NEXUS checks your ElevenLabs quota at startup. If it's low, it automatically sta
 
 ### System Monitoring & Alerts
 - A background thread on the laptop monitors CPU, battery and internet connectivity.
-- **CPU > 80%** → Alert pushed to Pi and spoken aloud.
-- **Battery < 20%** → Alert.
+- **CPU > 80%** → Alert pushed to Pi and spoken aloud. *(configurable via `CPU_ALERT_THRESHOLD` in `.env`)*
+- **Battery < 20%** → Alert. *(configurable via `BATTERY_ALERT_THRESHOLD` in `.env`)*
 - **Internet down** → Alert.
 - Cooldown timers prevent alert spam.
 
@@ -177,7 +177,7 @@ NEXUS checks your ElevenLabs quota at startup. If it's low, it automatically sta
 
 ### Personalization
 - *"My name is Ansh"* → Remembered across sessions.
-- *"I live in Mumbai"* → Weather defaults to your city.
+- *"I live in Mumbai"* → Weather defaults to your city. Set a global default via `DEFAULT_CITY` in `.env`.
 - Persistent user profile stored on the laptop.
 
 ---
@@ -522,7 +522,7 @@ Paste the following and **fill in your actual keys** (replace the `xxxx` placeho
 # Connection to your laptop server
 LAPTOP_IP=192.168.1.x          # ← Replace x with your laptop's actual IP
 LAPTOP_PORT=5000
-NEXUS_TOKEN=my-secret-token-123 # ← Make up any passphrase. Must match laptop .env!
+NEXUS_TOKEN=my-secret-token-123 # ← REQUIRED. Make up any passphrase. Must match laptop .env!
 
 # AI providers
 GROQ_API_KEY=gsk_xxxxxxxxxxxx   # ← From console.groq.com → API Keys
@@ -530,7 +530,11 @@ GOOGLE_API_KEY=AIzaXXXXXXXXXX   # ← From aistudio.google.com → Get API Key
 
 # Text-to-Speech
 ELEVENLABS_API_KEY=sk_xxxxxxxx  # ← From elevenlabs.io → Profile → API Keys
+ELEVENLABS_VOICE_ID=JBFqnCBsd6RMkjVDRZzb  # ← Optional: change to any voice from elevenlabs.io/voice-library
 DEEPGRAM_API_KEY=xxxxxxxx       # ← From deepgram.com → Dashboard → API Keys
+
+# Default city for weather (user can override at runtime: "I live in Tokyo")
+DEFAULT_CITY=London
 
 # Web Search & News
 TAVILY_API_KEY=tvly-xxxxxxxxxxxx # ← From tavily.com → Dashboard
@@ -725,8 +729,15 @@ In the project root folder (the same folder that contains `laptop_server.py`), c
 # NEXUS — Laptop Server Environment Variables
 # ─────────────────────────────────────────
 
-# Shared auth token (MUST match the Pi's .env — this is how they authenticate)
+# Shared auth token — REQUIRED. NEXUS refuses to start if this is missing.
+# Must be the exact same string on both Pi and laptop.
 NEXUS_TOKEN=my-secret-token-123
+
+# Optional overrides (defaults shown)
+# SPOTIFY_REDIRECT_URI=http://127.0.0.1:5000/callback
+# LAPTOP_PORT=5000
+# CPU_ALERT_THRESHOLD=80
+# BATTERY_ALERT_THRESHOLD=20
 
 # Spotify OAuth credentials (from Step 7)
 SPOTIFY_CLIENT_ID=your_client_id_from_spotify_dashboard
@@ -1065,8 +1076,8 @@ In-memory chat history is capped at **50 messages** to protect the Pi Zero's 512
 
 | Layer | How It Works |
 |-------|-------------|
-| **Token authentication** | All mutating API endpoints require the `X-Nexus-Token` header. The token is loaded from `.env` — never hardcoded in source code. |
-| **App whitelist** | Only pre-approved applications can be opened/closed (20+ apps defined in the `ALLOWED_APPS` dictionary). |
+| **Token authentication** | All mutating API endpoints require the `X-Nexus-Token` header. The token is loaded from `.env` — **required at startup**, NEXUS refuses to run if not set. |
+| **App whitelist** | Only pre-approved applications can be opened/closed (20+ apps defined in the `ALLOWED_APPS` dictionary). Requests for apps outside the whitelist are rejected — no shell fallback. |
 | **Command whitelist** | Terminal commands are restricted to safe prefixes: `git status`, `python --version`, `pip list`, `ipconfig`, etc. Arbitrary commands are rejected with HTTP 403. |
 | **Safe calculator** | Math evaluation uses Python's `ast` module to parse expressions into an AST tree. No `eval()`, no `exec()`, no code injection possible. Only arithmetic operators are allowed. |
 | **No secrets in code** | All API keys, tokens, and credentials are loaded from `.env` files via `python-dotenv`. The `.env` file is listed in `.gitignore` and never committed. |
@@ -1078,6 +1089,7 @@ In-memory chat history is capped at **50 messages** to protect the Pi Zero's 512
 
 | Symptom | Likely Cause | Fix |
 |---------|-------------|-----|
+| **`FATAL: NEXUS_TOKEN is not set`** at startup | `NEXUS_TOKEN` missing from `.env` | Add `NEXUS_TOKEN=your-secret` to `.env` on both the Pi and laptop. Both values must match. |
 | **`[FAIL] Ears Failed`** at boot | Groq API key invalid or missing | Check `GROQ_API_KEY` in Pi's `.env` file |
 | **`[FAIL] Brain Online`** at boot | Google API key not set | Check `GOOGLE_API_KEY` in Pi's `.env` file |
 | **`[FAIL] Laptop Connected`** at boot | Laptop server not running, wrong IP, or firewall | 1) Start `laptop_server.py` on laptop, 2) Verify `LAPTOP_IP` in Pi `.env`, 3) Allow port 5000 in Windows Firewall |
