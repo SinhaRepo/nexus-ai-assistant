@@ -2,30 +2,30 @@
 # Install: pip install -r requirements-pi.txt --break-system-packages
 
 # Core
-requests>=2.31.0
-python-dotenv>=1.0.0
-rich>=13.0.0
+requests>=2.31.0,<3.0.0
+python-dotenv>=1.0.0,<2.0.0
+rich>=13.0.0,<14.0.0
 pytz>=2024.1
 
 # Audio I/O
-sounddevice>=0.4.6
-numpy>=1.24.0
-scipy>=1.10.0
-PyAudio>=0.2.13
-pygame>=2.5.0
+sounddevice>=0.4.6,<0.5.0
+numpy>=1.24.0,<2.0.0
+scipy>=1.10.0,<2.0.0
+PyAudio>=0.2.13,<0.3.0
+pygame>=2.5.0,<3.0.0
 
 # Speech-to-Text
-groq>=0.4.0
+groq>=0.4.0,<1.0.0
 
 # Text-to-Speech
-edge-tts>=6.1.0
-pyttsx3>=2.90
+edge-tts>=6.1.0,<7.0.0
+pyttsx3>=2.90,<3.0.0
 
-# Wake Word
-pvporcupine>=3.0.0
+# Wake Word — pinned to v3.x; v4 has breaking API changes, test before upgrading
+pvporcupine>=3.0.0,<4.0.0
 
 # Web Search (fallback)
-duckduckgo_search>=5.0.0
+duckduckgo_search>=5.0.0,<7.0.0
 
 # GPIO (Pi-only, usually pre-installed)
-gpiozero>=2.0
+gpiozero>=2.0,<3.0.0
