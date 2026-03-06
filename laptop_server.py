@@ -31,7 +31,9 @@ _shutdown = False
 _active_driver = None  # Reusable Selenium driver
 
 # --- AUTH CONFIG ---
-NEXUS_TOKEN = os.environ.get("NEXUS_TOKEN", os.environ.get("JARVIS_TOKEN", "nexus-secret-2026"))
+NEXUS_TOKEN = os.environ.get("NEXUS_TOKEN") or os.environ.get("JARVIS_TOKEN")
+if not NEXUS_TOKEN:
+    raise SystemExit("FATAL: NEXUS_TOKEN is not set in your .env file. Set it to any secret passphrase and add the same value to your Pi .env. Refusing to start.")
 
 def require_auth(f):
     @wraps(f)
@@ -52,12 +54,12 @@ SPOTIFY_TOKEN_FILE = os.path.join(BASE_DIR, "spotify_token.json")
 # --- SPOTIFY CONFIG ---
 SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID", "")
 SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET", "")
-SPOTIFY_REDIRECT_URI = "http://127.0.0.1:5000/callback"
+SPOTIFY_REDIRECT_URI = os.environ.get("SPOTIFY_REDIRECT_URI", "http://127.0.0.1:5000/callback")
 SPOTIFY_SCOPES = "user-modify-playback-state user-read-playback-state user-read-currently-playing streaming"
 
 # --- SYSTEM MONITORING CONFIG ---
-CPU_ALERT_THRESHOLD = 80  # percent
-BATTERY_ALERT_THRESHOLD = 20  # percent
+CPU_ALERT_THRESHOLD = int(os.environ.get("CPU_ALERT_THRESHOLD", 80))       # percent
+BATTERY_ALERT_THRESHOLD = int(os.environ.get("BATTERY_ALERT_THRESHOLD", 20))  # percent
 _alerts_queue = []  # Alerts to push to Pi on next poll
 _alerts_lock = threading.Lock()
 
@@ -548,12 +550,7 @@ def open_app():
         
         exe = ALLOWED_APPS.get(app_name)
         if not exe:
-            # Try direct launch via shell (handles apps on PATH)
-            try:
-                subprocess.Popen(f'start "" "{app_name}"', shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                return jsonify({"success": True, "message": f"Launched: {app_name}"}), 200
-            except Exception:
-                return jsonify({"error": f"Unknown app: {app_name}. Allowed: {', '.join(ALLOWED_APPS.keys())}"}), 400
+            return jsonify({"error": f"App '{app_name}' is not in the allowed list. Allowed apps: {', '.join(sorted(ALLOWED_APPS.keys()))}"}), 400
         
         # Handle URI schemes (ms-settings:, etc.)
         if exe.startswith("ms-") or exe.startswith("http") or exe.startswith("explorer.exe shell:"):
@@ -1063,11 +1060,12 @@ def music_ytdlp():
 # MAIN
 # ==========================================
 if __name__ == '__main__':
+    _port = int(os.environ.get("LAPTOP_PORT", 5000))
     print("=" * 60)
-    print("Starting NEXUS Laptop Server on port 5000...")
+    print(f"Starting NEXUS Laptop Server on port {_port}...")
     print("=" * 60)
     print()
-    print("  STEP 1: Open http://127.0.0.1:5000/spotify/login in your browser")
+    print(f"  STEP 1: Open http://127.0.0.1:{_port}/spotify/login in your browser")
     print("          to connect Spotify (one-time setup).")
     print()
     print("  Available Endpoints:")
@@ -1137,4 +1135,4 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, _handle_shutdown)
     signal.signal(signal.SIGTERM, _handle_shutdown)
 
-    app.run(host='0.0.0.0', port=5000, threaded=True)
+    app.run(host='0.0.0.0', port=int(os.environ.get("LAPTOP_PORT", 5000)), threaded=True)
