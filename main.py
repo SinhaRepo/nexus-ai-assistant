@@ -89,6 +89,8 @@ except ImportError:
 
 load_dotenv()
 
+DEFAULT_CITY = os.getenv("DEFAULT_CITY", "London")
+
 # ==========================================
 # SHARED AUDIO COORDINATION
 # ==========================================
@@ -102,7 +104,9 @@ _button_audio_lock = threading.Lock() # Protects _button_audio_buf
 # ==========================================
 # CONFIGURATION & KEYS
 # ==========================================
-NEXUS_TOKEN = os.getenv("NEXUS_TOKEN", os.getenv("JARVIS_TOKEN", "nexus-secret-2026"))
+NEXUS_TOKEN = os.getenv("NEXUS_TOKEN") or os.getenv("JARVIS_TOKEN")
+if not NEXUS_TOKEN:
+    raise SystemExit("FATAL: NEXUS_TOKEN is not set in your .env file. Set it to any secret passphrase and add the same value to your laptop .env. Refusing to start.")
 LAPTOP_IP = os.getenv("LAPTOP_IP", "192.168.1.5")
 LAPTOP_PORT = os.getenv("LAPTOP_PORT", "5000")
 
@@ -133,7 +137,7 @@ req_session.headers.update({
 chat_history = []
 user_profile = {
     "name": None,
-    "city": "Surat",
+    "city": DEFAULT_CITY,
     "favorite_artists": [],
     "last_active": None,
     "conversation_count": 0,
@@ -363,7 +367,7 @@ CRITICAL RULES — NEVER VIOLATE:
     if not uname or uname in ["Unknown", "Boss", "None"]:
         uname = "Boss"
     sys_prompt += f"\nUser's name is {uname}. Always use this name. Never use a wrong name."
-    sys_prompt += f"\nThe user lives in {user_profile.get('city', 'Surat')}."
+    sys_prompt += f"\nThe user lives in {user_profile.get('city', DEFAULT_CITY)}."
 
     if not chat_history or chat_history[0]["role"] != "system":
         chat_history.insert(0, {"role": "system", "content": sys_prompt})
@@ -392,7 +396,7 @@ def load_persistence():
             else:
                 p_data["name"] = "Boss"
             if "city" in p_data and (not p_data["city"] or p_data["city"] in ["Kya", "Unknown", "None"]):
-                p_data["city"] = "Surat"
+                p_data["city"] = DEFAULT_CITY
             user_profile.update(p_data)
 
             mem_hist = data.get("chat_history", [])
@@ -468,7 +472,7 @@ def get_live_weather(city):
     try:
         clean_city = city.lower().replace('how is', '').replace('weather in', '').replace('temperature in', '').strip()
         if not clean_city:
-            clean_city = "Surat"
+            clean_city = DEFAULT_CITY
         geo_url = f"https://nominatim.openstreetmap.org/search?q={clean_city}&format=json&limit=1"
         geo_res = req_session.get(geo_url, timeout=10).json()
         if geo_res and len(geo_res) > 0:
@@ -905,7 +909,7 @@ def process_command(text):
             resp = req_session.delete(f"http://{LAPTOP_IP}:{LAPTOP_PORT}/memory", timeout=2, headers={"X-Nexus-Token": NEXUS_TOKEN})
             if resp.status_code == 200:
                 chat_history = []
-                user_profile = {"name": None, "city": "Surat", "favorite_artists": [], "last_active": None, "conversation_count": 0, "custom_facts": {}}
+                user_profile = {"name": None, "city": DEFAULT_CITY, "favorite_artists": [], "last_active": None, "conversation_count": 0, "custom_facts": {}}
                 inject_system_prompt()
                 save_persistence()
                 return "Memory entirely wiped. Starting fresh!"
@@ -1019,7 +1023,7 @@ def process_command(text):
                 _gm_time = datetime.datetime.now().strftime('%I:%M %p, %A, %d %B %Y')
         context += f"[LIVE SYSTEM TIME]: {_gm_time}\n"
 
-        context += get_live_weather(user_profile.get("city", "Surat")) + "\n"
+        context += get_live_weather(user_profile.get("city", DEFAULT_CITY)) + "\n"
         news = get_news_headlines()
         if news:
             context += news + "\n"
@@ -1044,7 +1048,7 @@ def process_command(text):
 
     # --- GOOD EVENING / GOOD NIGHT ---
     if "good evening" in text_lower:
-        context += get_live_weather(user_profile.get("city", "Surat")) + "\n"
+        context += get_live_weather(user_profile.get("city", DEFAULT_CITY)) + "\n"
         context += "ACTION: Greet the user for the evening."
     
     # --- SLEEP / GOODNIGHT ---
@@ -1108,7 +1112,7 @@ def process_command(text):
         elif m2 and m2.group(1).lower() not in ignore_words:
             city = m2.group(1).capitalize()
         else:
-            city = user_profile.get("city", "Surat")
+            city = user_profile.get("city", DEFAULT_CITY)
         weather_data = get_live_weather(city)
         context += weather_data + "\n"
         if "down" in weather_data.lower() or "not found" in weather_data.lower():
