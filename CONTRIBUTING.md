@@ -80,7 +80,7 @@ python laptop_server.py
 
 3. **Test on real hardware if possible.** If you don't have a Pi Zero W, test on any Pi or even just the laptop server portion.
 
-4. **Write a clear PR description** — explain what changed, why, and how you tested it.
+4. **Write a clear PR description** — explain what changed, why and how you tested it.
 
 5. **Open the PR against `main`.**
 
